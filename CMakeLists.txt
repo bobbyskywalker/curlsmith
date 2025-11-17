@@ -32,10 +32,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 # ------------------------------------------------------------
-# curlsmith executable
+# Automatically find all source files
 # ------------------------------------------------------------
+file(GLOB_RECURSE CURLSMITH_SOURCES
+    src/*.cpp
+)
+
 add_executable(curlsmith_app
-    src/main.cpp
+    ${CURLSMITH_SOURCES}
 )
 
 target_link_libraries(curlsmith_app
