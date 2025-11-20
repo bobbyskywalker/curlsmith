@@ -1,4 +1,4 @@
-#include "../inc/App.hpp"
+#include "../inc/AppInterface.hpp"
 #include "../inc/HttpMethod.hpp"
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-void App::initChildren() {
+void AppInterface::initChildren() {
     urlInput = Input(&urlInputValue, "Type here...");
 
     methodOptions = {
@@ -42,7 +42,7 @@ void App::initChildren() {
     });
 }
 
-void App::populateRoot() {
+void AppInterface::populateRoot() {
     root = ftxui::Container::Vertical({
         urlInput,
         methodRadiobox,
@@ -53,7 +53,7 @@ void App::populateRoot() {
     });
 }
 
-std::vector<Element> App::renderHeaderElements() const {
+std::vector<Element> AppInterface::renderHeaderElements() const {
     std::vector<Element> headerElems;
     for (size_t i = 0; i < headerData.size(); i++) {
         headerElems.push_back(
@@ -68,7 +68,7 @@ std::vector<Element> App::renderHeaderElements() const {
     return headerElems;
 }
 
-std::vector<Element> App::renderMainElements(const std::vector<Element>& headerElements) const {
+std::vector<Element> AppInterface::renderMainElements(const std::vector<Element>& headerElements) const {
     std::vector mainElements = {
         text("A TUI curl command builder"),
         separator(),
@@ -88,7 +88,7 @@ std::vector<Element> App::renderMainElements(const std::vector<Element>& headerE
     return mainElements;
 }
 
-void App::renderRequestBodyField(std::vector<Element>& mainElements) const {
+void AppInterface::renderRequestBodyField(std::vector<Element>& mainElements) const {
     if (methodSelected == static_cast<int>(HttpMethod::POST) ||
         methodSelected == static_cast<int>(HttpMethod::PUT) ||
         methodSelected == static_cast<int>(HttpMethod::PATCH)) {
@@ -102,7 +102,7 @@ void App::renderRequestBodyField(std::vector<Element>& mainElements) const {
         }
 }
 
-App::App() {
+AppInterface::AppInterface() {
     methodSelected = 0;
     initChildren();
     populateRoot();
@@ -116,7 +116,7 @@ App::App() {
     });
 }
 
-void App::run() const {
+void AppInterface::run() const {
     auto screen = ScreenInteractive::TerminalOutput();
     screen.TrackMouse(false);
     screen.Loop(root);

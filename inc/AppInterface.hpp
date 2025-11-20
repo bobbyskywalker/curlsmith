@@ -29,9 +29,9 @@ using ftxui::border;
 using ftxui::WIDTH;
 using ftxui::EQUAL;
 
-class App {
+class AppInterface {
 public:
-    App();
+    AppInterface();
 
     void run() const;
 
