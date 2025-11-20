@@ -29,6 +29,14 @@ using ftxui::border;
 using ftxui::WIDTH;
 using ftxui::EQUAL;
 
+
+struct HeaderData {
+    std::string key;
+    std::string value;
+    ftxui::Component keyInput;
+    ftxui::Component valueInput;
+};
+
 class AppInterface {
 public:
     AppInterface();
@@ -53,12 +61,6 @@ private:
     ftxui::Component generateCmdButton;
 
     /* headers */
-    struct HeaderData {
-        std::string key;
-        std::string value;
-        ftxui::Component keyInput;
-        ftxui::Component valueInput;
-    };
 
     std::vector<std::shared_ptr<HeaderData> > headerData;
     ftxui::Component headersContainer;

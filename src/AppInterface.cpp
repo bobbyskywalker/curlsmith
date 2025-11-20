@@ -1,10 +1,12 @@
 #include "../inc/AppInterface.hpp"
 #include "../inc/HttpMethod.hpp"
+#include "../inc/CommandBuilder.hpp"
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <string>
 #include <memory>
+
 
 void AppInterface::initChildren() {
     urlInput = Input(&urlInputValue, "Type here...");
@@ -20,9 +22,12 @@ void AppInterface::initChildren() {
         std::exit(1);
     });
 
-    generateCmdButton = CatchEvent(generateCmdButton, [](Event const& event) {
+    generateCmdButton = CatchEvent(generateCmdButton, [this](Event const& event) {
         if (event == Event::Return) {
-            std::exit(1);
+            const std::string command = CommandBuilder::buildCurlCmd(
+                static_cast<HttpMethod>(methodSelected), urlInputValue, requestBodyValue, headerData
+            );
+            return true;
         }
         return false;
     });
