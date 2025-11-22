@@ -1,12 +1,13 @@
 #pragma once
 
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/dom/node.hpp>
 #include <memory>
 #include <vector>
 #include <string>
-
-#include "ftxui/component/component.hpp"
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/dom/node.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using ftxui::Element;
 using ftxui::Input;

@@ -2,12 +2,6 @@
 #include "../inc/HttpMethod.hpp"
 #include "../inc/curlsmith.hpp"
 #include "../inc/CommandBuilder.hpp"
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <string>
-#include <memory>
-
 
 void AppInterface::initChildren() {
     urlInput = Input(&urlInputValue, "Type here...");
@@ -19,9 +13,11 @@ void AppInterface::initChildren() {
 
     requestBody = Input(&requestBodyValue, "Type here...");
 
-    generateCmdButton = Button("Generate", []{/**/});
+    generateCmdButton = Button("Generate", [] {
+        /**/
+    });
 
-    generateCmdButton = CatchEvent(generateCmdButton, [this](Event const& event) {
+    generateCmdButton = CatchEvent(generateCmdButton, [this](Event const &event) {
         if (event == Event::Return) {
             generatedCommand = CommandBuilder::buildCurlCmd(
                 static_cast<HttpMethod>(methodSelected),
@@ -36,7 +32,7 @@ void AppInterface::initChildren() {
 
     headersContainer = ftxui::Container::Vertical({});
 
-    addHeaderButton = Button("Add header", [this]{
+    addHeaderButton = Button("Add header", [this] {
         const auto data = std::make_shared<HeaderData>();
         headerData.push_back(data);
 
@@ -75,7 +71,7 @@ std::vector<Element> AppInterface::renderHeaderElements() const {
     return headerElems;
 }
 
-std::vector<Element> AppInterface::renderMainElements(const std::vector<Element>& headerElements) const {
+std::vector<Element> AppInterface::renderMainElements(const std::vector<Element> &headerElements) const {
     std::vector mainElements = {
         text("A TUI curl command builder"),
         separator(),
@@ -95,11 +91,8 @@ std::vector<Element> AppInterface::renderMainElements(const std::vector<Element>
     return mainElements;
 }
 
-void AppInterface::renderRequestBodyField(std::vector<Element>& mainElements) const {
-    if (methodSelected == static_cast<int>(HttpMethod::POST) ||
-        methodSelected == static_cast<int>(HttpMethod::PUT) ||
-        methodSelected == static_cast<int>(HttpMethod::PATCH)) {
-
+void AppInterface::renderRequestBodyField(std::vector<Element> &mainElements) const {
+    if (isBodyInMethod(static_cast<HttpMethod>(methodSelected))) {
         mainElements.push_back(hbox({
             text("Request body"),
             filler()
@@ -112,7 +105,7 @@ void AppInterface::renderRequestBodyField(std::vector<Element>& mainElements) co
 std::vector<Element> AppInterface::renderGeneratedCommand() const {
     const auto lines = splitLines(generatedCommand);
     std::vector<Element> lineElements;
-    for (const auto& line : lines) {
+    for (const auto &line: lines) {
         lineElements.push_back(text(line));
     }
     return lineElements;

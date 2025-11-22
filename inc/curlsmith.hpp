@@ -6,4 +6,5 @@
 #include <string>
 #include <sstream>
 
-std::vector<std::string> splitLines(const std::string& str);
+bool                        isBodyInMethod(HttpMethod method);
+std::vector<std::string>    splitLines(const std::string& str);

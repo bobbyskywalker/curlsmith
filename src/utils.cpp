@@ -1,7 +1,13 @@
 #include "../inc/HttpMethod.hpp"
 #include "../inc/curlsmith.hpp"
 
-std::vector<std::string> splitLines(const std::string& str) {
+bool isBodyInMethod(const HttpMethod method) {
+    if (method == HttpMethod::POST || method == HttpMethod::PUT || method == HttpMethod::PATCH)
+        return true;
+    return false;
+}
+
+std::vector<std::string> splitLines(const std::string &str) {
     std::vector<std::string> lines;
     std::stringstream ss(str);
     std::string line;
@@ -12,7 +18,7 @@ std::vector<std::string> splitLines(const std::string& str) {
 }
 
 std::string httpMethodToString(const HttpMethod method) {
-    switch(method) {
+    switch (method) {
         case HttpMethod::GET: return "GET";
         case HttpMethod::POST: return "POST";
         case HttpMethod::PUT: return "PUT";

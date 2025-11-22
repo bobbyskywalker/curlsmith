@@ -1,8 +1,8 @@
 #include "../inc/CommandBuilder.hpp"
+#include "../inc/curlsmith.hpp"
 
-std::string CommandBuilder::buildCurlCmd(const HttpMethod method, const std::string& url, const std::string& body,
-                const std::vector<std::shared_ptr<HeaderData>>&  headersData) {
-
+std::string CommandBuilder::buildCurlCmd(const HttpMethod method, const std::string &url, const std::string &body,
+                                         const std::vector<std::shared_ptr<HeaderData> > &headersData) {
     const std::string baseToken = "curl";
     const std::string methodToken = "-X";
     const std::string headerToken = "-H";
@@ -11,12 +11,12 @@ std::string CommandBuilder::buildCurlCmd(const HttpMethod method, const std::str
     std::string result = baseToken + " " + methodToken + " " + httpMethodToString(method) + " " + url;
 
     if (!headersData.empty()) {
-        for (const auto& header : headersData) {
+        for (const auto &header: headersData) {
             result += " \\\n" + headerToken + " \"" + header->key + ": " + header->value + "\"";
         }
     }
 
-    if (!body.empty()) {
+    if (!body.empty() && isBodyInMethod(method)) {
         result += " \\\n" + bodyToken + " '" + body + "'";
     }
 
