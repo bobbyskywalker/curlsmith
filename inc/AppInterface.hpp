@@ -56,9 +56,12 @@ private:
 
     void renderRequestBodyField(std::vector<Element> &mainElements) const;
 
+    [[nodiscard]] std::vector<Element> renderGeneratedCommand() const;
+
     /* root component */
-    ftxui::Component root;
-    ftxui::Component generateCmdButton;
+    ftxui::Component    root;
+    ftxui::Component    generateCmdButton;
+    std::string         generatedCommand;
 
     /* headers */
 

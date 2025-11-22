@@ -14,4 +14,4 @@ enum class HttpMethod {
 };
 
 /* string mapper for rendering */
-const std::string httpMethodToString(HttpMethod method);
+std::string httpMethodToString(HttpMethod method);

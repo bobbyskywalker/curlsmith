@@ -1,5 +1,6 @@
 #include "../inc/AppInterface.hpp"
 #include "../inc/HttpMethod.hpp"
+#include "../inc/curlsmith.hpp"
 #include "../inc/CommandBuilder.hpp"
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
@@ -18,14 +19,15 @@ void AppInterface::initChildren() {
 
     requestBody = Input(&requestBodyValue, "Type here...");
 
-    generateCmdButton = Button("Generate", []{
-        std::exit(1);
-    });
+    generateCmdButton = Button("Generate", []{/**/});
 
     generateCmdButton = CatchEvent(generateCmdButton, [this](Event const& event) {
         if (event == Event::Return) {
-            const std::string command = CommandBuilder::buildCurlCmd(
-                static_cast<HttpMethod>(methodSelected), urlInputValue, requestBodyValue, headerData
+            generatedCommand = CommandBuilder::buildCurlCmd(
+                static_cast<HttpMethod>(methodSelected),
+                urlInputValue,
+                requestBodyValue,
+                headerData
             );
             return true;
         }
@@ -104,7 +106,16 @@ void AppInterface::renderRequestBodyField(std::vector<Element>& mainElements) co
         }));
         mainElements.push_back(requestBody->Render());
         mainElements.push_back(separator());
-        }
+    }
+}
+
+std::vector<Element> AppInterface::renderGeneratedCommand() const {
+    const auto lines = splitLines(generatedCommand);
+    std::vector<Element> lineElements;
+    for (const auto& line : lines) {
+        lineElements.push_back(text(line));
+    }
+    return lineElements;
 }
 
 AppInterface::AppInterface() {
@@ -117,6 +128,12 @@ AppInterface::AppInterface() {
         std::vector<Element> mainElements = renderMainElements(headerElements);
         renderRequestBodyField(mainElements);
         mainElements.push_back(generateCmdButton->Render());
+        if (!generatedCommand.empty()) {
+            const auto lineElements = renderGeneratedCommand();
+            mainElements.push_back(
+                vbox(lineElements) | border | size(ftxui::HEIGHT, ftxui::LESS_THAN, 10)
+            );
+        }
         return window(text("curlsmith"), vbox(mainElements)) | center;
     });
 }
